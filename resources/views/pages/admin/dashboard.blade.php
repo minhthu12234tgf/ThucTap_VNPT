@@ -118,7 +118,7 @@
                         </span>
                         <div class="info-box-content">
                             <span class="info-box-text">Trực tuyến</span>
-                            <span class="info-box-number" id="online-count">4</span>
+                            <span class="info-box-number" id="online-count">{{ $statusEmployeeCounts['truc_tuyen'] }}</span>
                         </div>
                     </div>
                 </div>
@@ -131,7 +131,7 @@
                         </span>
                         <div class="info-box-content">
                             <span class="info-box-text">Đang bận</span>
-                            <span class="info-box-number" id="busy-count">43</span>
+                            <span class="info-box-number" id="busy-count">{{ $statusEmployeeCounts['dang_ban'] }}</span>
                         </div>
                     </div>
                 </div>
@@ -144,7 +144,7 @@
                         </span>
                         <div class="info-box-content">
                             <span class="info-box-text">Không trực tuyến</span>
-                            <span class="info-box-number" id="offline-count">2</span>
+                            <span class="info-box-number" id="offline-count">{{ $statusEmployeeCounts['khong_truc_tuyen'] }}</span>
                         </div>
                     </div>
                 </div>
@@ -157,7 +157,7 @@
                         </span>
                         <div class="info-box-content">
                             <span class="info-box-text">Yêu cầu chờ xử lý</span>
-                            <span class="info-box-number" id="pending-count">3</span>
+                            <span class="info-box-number" id="pending-count">{{ $requestCounts }}</span>
                         </div>
                     </div>
                 </div>
@@ -190,6 +190,12 @@
 
     <!-- MarkerCluster JS -->
     <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+
+    <!-- Data JS -->
+    <script>
+        const allData = @json($allData);
+        // console.log(allData); // Kiểm tra dữ liệu đã lấy được chưa
+    </script>
 
     {{-- CUSTOM SCRIPT --}}
     <script src="./js/dashboard.js"></script>

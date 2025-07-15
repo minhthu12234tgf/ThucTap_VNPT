@@ -1,25 +1,93 @@
 // HIỂN THỊ BẢN ĐỒ VỚI CÁC NHÂN VIÊN TRÊN DASHBOARD
-document.addEventListener('DOMContentLoaded', function () {
-    const employees = [
-        { name: "Nguyễn Văn Anh Khang", status: "Đang bận", lat: 10.762622, lng: 106.660172, avatar: "./assets/img/vnpt.jpg", type: "employee" },
-        { name: "Trần Thị A", status: "Trực tuyến", lat: 10.762622, lng: 106.660172, avatar: "./assets/img/vnpt.jpg", type: "employee" },
-        { name: "Trần Thị B", status: "Trực tuyến", lat: 10.762622, lng: 106.660172, avatar: "./assets/img/vnpt.jpg", type: "employee" },
-        { name: "Phạm Thị D", status: "Đang bận", lat: 10.750000, lng: 106.635000, avatar: "./assets/img/vnpt.jpg", type: "employee" },
-        { name: "Ngô Văn E", status: "Trực tuyến", lat: 10.790000, lng: 106.660000, avatar: "./assets/img/vnpt.jpg", type: "employee" }
-    ];
 
-    const customers = [
-        { name: "Khách hàng 1", status: "Chờ xử lý", lat: 10.762622, lng: 106.660172, avatar: "./assets/img/user.png", type: "customer" },
-        { name: "Khách hàng 2", status: "Chờ xử lý", lat: 10.765500, lng: 106.661500, avatar: "./assets/img/user.png", type: "customer" }
-    ];
+// Dữ liệu mẫu (có thể thay thế bằng dữ liệu từ server)
+// let employees = [
+//     { ho_ten: "Nguyễn Văn Anh Khang", trang_thai: "Đang bận", vi_do: 10.762622, kinh_do: 106.660172, anh_dai_dien: "./assets/img/vnpt.jpg", loai: "employee" },
+//     { ho_ten: "Trần Thị A", trang_thai: "Trực tuyến", vi_do: 10.762622, kinh_do: 106.660172, anh_dai_dien: "./assets/img/vnpt.jpg", loai: "employee" },
+//     { ho_ten: "Trần Thị B", trang_thai: "Trực tuyến", vi_do: 10.762622, kinh_do: 106.660172, anh_dai_dien: "./assets/img/vnpt.jpg", loai: "employee" },
+//     { ho_ten: "Phạm Thị D", trang_thai: "Đang bận", vi_do: 10.750000, kinh_do: 106.635000, anh_dai_dien: "./assets/img/vnpt.jpg", loai: "employee" },
+//     { ho_ten: "Ngô Văn E", trang_thai: "Trực tuyến", vi_do: 10.790000, kinh_do: 106.660000, anh_dai_dien: "./assets/img/vnpt.jpg", loai: "employee" }
+// ];
 
-    const map = L.map('map').setView([10.762622, 106.660172], 13);
+// const customers = [
+//     { ho_ten: "Khách hàng 1", trang_thai: "Chờ xử lý", vi_do: 10.762622, kinh_do: 106.660172, anh_dai_dien: "./assets/img/user.png", loai: "customer" },
+//     { ho_ten: "Khách hàng 2", trang_thai: "Chờ xử lý", vi_do: 10.765500, kinh_do: 106.661500, anh_dai_dien: "./assets/img/user.png", loai: "customer" }
+// ]
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
+document.addEventListener('DOMContentLoaded', async function () {
+    const DISTANCE_THRESHOLD = 100; // mét
+    let allMarkers = allData;
 
-    const markerCluster = L.markerClusterGroup();
+    // 1. Fetch dữ liệu từ server
+    
+    // try {
+    //     const res = await fetch('/getEmployeeAndRequests', {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+    //         }
+    //     });
+
+    //     const data = await res.json();
+    //     allMarkers = data.data || [];
+    //     console.log('✅ Dữ liệu từ server:', allMarkers);
+    // } catch (error) {
+    //     console.error('❌ Lỗi khi lấy dữ liệu từ server:', error);
+    //     return;
+    // }
+
+    // 2. Hàm tính khoảng cách Haversine
+    function haversineDistance(lat1, lng1, lat2, lng2) {
+        const toRad = deg => deg * Math.PI / 180;
+        const R = 6371e3; // Bán kính Trái Đất (m)
+
+        const dLat = toRad(lat2 - lat1);
+        const dLng = toRad(lng2 - lng1);
+        const a = Math.sin(dLat / 2) ** 2 +
+            Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+            Math.sin(dLng / 2) ** 2;
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c;
+    }
+
+    // 3. Gán cờ "isCrowded" trước để tối ưu hiệu năng
+    allMarkers.forEach((item, i) => {
+        item.isCrowded = false;
+        for (let j = 0; j < allMarkers.length; j++) {
+            if (i === j) continue;
+            const d = haversineDistance(item.vi_do, item.kinh_do, allMarkers[j].vi_do, allMarkers[j].kinh_do);
+            if (d < DISTANCE_THRESHOLD) {
+                item.isCrowded = true;
+                break;
+            }
+        }
+    });
+
+    // 4. Hàm hiển thị tooltip
+    function buildTooltip(item) {
+        const color = item.loai === 'employee'
+            ? getStatusColor(item.trang_thai)
+            : getRequestColor(item.trang_thai);
+
+        const label = item.loai === 'employee' ? 'Kỹ thuật viên' : 'Khách hàng';
+        const icon = item.loai === 'employee' ? '👨‍🔧' : '📌';
+
+        return `
+            <div class="tooltip-custom d-flex align-items-center gap-2">
+                <img src="${item.anh_dai_dien}" alt="${item.ho_ten}" class="avatar-img" style="width: 40px; height: 40px; border-radius: 50%;">
+                <div>
+                    <div class="fw-semibold text-dark">${item.ho_ten}</div>
+                    <div class="status-text" style="color:${color}">
+                        ${icon} ${item.trang_thai}
+                    </div>
+                    <div class="badge ${item.loai === 'employee' ? 'bg-primary text-white' : 'bg-warning text-dark'} mt-1 px-2 py-1 rounded">
+                        ${label}
+                    </div>
+                </div>
+            </div>
+        `;
+    }
 
     function getStatusColor(status) {
         return status === "Trực tuyến" ? "green" : "#E65100";
@@ -29,55 +97,44 @@ document.addEventListener('DOMContentLoaded', function () {
         return status === "Chờ xử lý" ? "red" : "blue";
     }
 
-    function haversineDistance(lat1, lng1, lat2, lng2) {
-        function toRad(x) {
-            return x * Math.PI / 180;
-        }
+    // 5. Hiển thị bản đồ Leaflet
+    const map = L.map('map').setView([10.762622, 106.660172], 13);
 
-        const R = 6371e3; // Bán kính Trái Đất (m)
-        const φ1 = toRad(lat1);
-        const φ2 = toRad(lat2);
-        const Δφ = toRad(lat2 - lat1);
-        const Δλ = toRad(lng2 - lng1);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
 
-        const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
-            Math.cos(φ1) * Math.cos(φ2) *
-            Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
-        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const markerCluster = L.markerClusterGroup();
 
-        return R * c; // khoảng cách mét
-    }
+    // 6. Tạo và xử lý từng marker
+    allMarkers.forEach(item => {
+        const tooltipHtml = buildTooltip(item);
 
-    const allMarkers = [...employees, ...customers];
-    const DISTANCE_THRESHOLD = 100; // mét
-
-    allMarkers.forEach((item, index) => {
-        const tooltipHtml = `
-            <div class="tooltip-custom d-flex align-items-center gap-2">
-                <img src="${item.avatar}" alt="${item.name}" class="avatar-img" style="width: 40px; height: 40px; border-radius: 50%;">
-                <div>
-                    <div class="fw-semibold text-dark">${item.name}</div>
-                    <div class="status-text" style="color:${item.type === 'employee' ? getStatusColor(item.status) : getRequestColor(item.status)}">
-                        ${item.type === 'employee' ? '👨‍🔧' : '📌'} ${item.status}
+        const marker = L.marker([item.vi_do, item.kinh_do], {
+            icon: L.divIcon({
+                html: `
+                    <div style="
+                        width: 40px;
+                        height: 40px;
+                        border-radius: 50%;
+                        overflow: hidden;
+                        border: 3px solid ${item.loai === 'employee' ? '#007bff' : '#ffc107'};
+                        box-shadow: 0 0 6px rgba(0,0,0,0.3);
+                        background-color: #fff;
+                    ">
+                        <img src="${item.anh_dai_dien}" 
+                            alt="${item.ho_ten}" 
+                            style="width: 100%; height: 100%; object-fit: cover;">
                     </div>
-                    <div class="badge ${item.type === 'employee' ? 'bg-primary text-white' : 'bg-warning text-dark'} mt-1 px-2 py-1 rounded">
-                        ${item.type === 'employee' ? 'Kỹ thuật viên' : 'Khách hàng'}
-                    </div>
-                </div>
-            </div>
-        `;
-
-        const marker = L.marker([item.lat, item.lng]);
-
-        // Kiểm tra marker này có gần marker nào khác không
-        const isCloseToOthers = allMarkers.some((other, idx) => {
-            if (index === idx) return false;
-            const d = haversineDistance(item.lat, item.lng, other.lat, other.lng);
-            return d < DISTANCE_THRESHOLD;
+                `,
+                className: '',
+                iconSize: [40, 40],
+                iconAnchor: [20, 20]
+            })
         });
 
-        if (!isCloseToOthers) {
-            // Không gần ai → hiển thị tooltip mặc định
+        // Tooltip mặc định nếu không gần ai
+        if (!item.isCrowded) {
             marker.bindTooltip(tooltipHtml, {
                 permanent: true,
                 direction: 'top',
@@ -89,7 +146,7 @@ document.addEventListener('DOMContentLoaded', function () {
             marker._tooltipVisible = false;
         }
 
-        // Bắt sự kiện click để toggle tooltip
+        // Toggle tooltip khi click
         marker.on('click', function () {
             if (marker._tooltipVisible) {
                 marker.unbindTooltip();
