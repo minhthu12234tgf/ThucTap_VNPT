@@ -1,162 +1,270 @@
-<!doctype html>
-<html lang="en">
-  <!--begin::Head-->
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>AdminLTE 4 | Register Page</title>
-    <!--begin::Accessibility Meta Tags-->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-    <meta name="color-scheme" content="light dark" />
-    <meta name="theme-color" content="#007bff" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)" />
-    <!--end::Accessibility Meta Tags-->
-    <!--begin::Primary Meta Tags-->
-    <meta name="title" content="AdminLTE 4 | Register Page" />
-    <meta name="author" content="ColorlibHQ" />
-    <meta
-      name="description"
-      content="AdminLTE is a Free Bootstrap 5 Admin Dashboard, 30 example pages using Vanilla JS. Fully accessible with WCAG 2.1 AA compliance."
-    />
-    <meta
-      name="keywords"
-      content="bootstrap 5, bootstrap, bootstrap 5 admin dashboard, bootstrap 5 dashboard, bootstrap 5 charts, bootstrap 5 calendar, bootstrap 5 datepicker, bootstrap 5 tables, bootstrap 5 datatable, vanilla js datatable, colorlibhq, colorlibhq dashboard, colorlibhq admin dashboard, accessible admin panel, WCAG compliant"
-    />
-    <!--end::Primary Meta Tags-->
-    <!--begin::Accessibility Features-->
-    <!-- Skip links will be dynamically added by accessibility.js -->
-    <meta name="supported-color-schemes" content="light dark" />
-    <link rel="preload" href="../css/adminlte.css" as="style" />
-    <!--end::Accessibility Features-->
-    <!--begin::Fonts-->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css"
-      integrity="sha256-tXJfXfp6Ewt1ilPzLDtQnJV4hclT9XuaZUKyUvmyr+Q="
-      crossorigin="anonymous"
-      media="print"
-      onload="this.media='all'"
-    />
-    <!--end::Fonts-->
-    <!--begin::Third Party Plugin(OverlayScrollbars)-->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css"
-      crossorigin="anonymous"
-    />
-    <!--end::Third Party Plugin(OverlayScrollbars)-->
-    <!--begin::Third Party Plugin(Bootstrap Icons)-->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
-      crossorigin="anonymous"
-    />
-    <!--end::Third Party Plugin(Bootstrap Icons)-->
-    <!--begin::Required Plugin(AdminLTE)-->
-    <link rel="stylesheet" href="../css/adminlte.css" />
-    <!--end::Required Plugin(AdminLTE)-->
-  </head>
-  <!--end::Head-->
-  <!--begin::Body-->
-  <body class="register-page bg-body-secondary">
-    <div class="register-box">
-      <div class="register-logo">
-        <a href="../index2.html"><b>Admin</b>LTE</a>
-      </div>
-      <!-- /.register-logo -->
-      <div class="card">
-        <div class="card-body register-card-body">
-          <p class="register-box-msg">Register a new membership</p>
-          <form action="../index3.html" method="post">
-            <div class="input-group mb-3">
-              <input type="text" class="form-control" placeholder="Full Name" />
-              <div class="input-group-text"><span class="bi bi-person"></span></div>
-            </div>
-            <div class="input-group mb-3">
-              <input type="email" class="form-control" placeholder="Email" />
-              <div class="input-group-text"><span class="bi bi-envelope"></span></div>
-            </div>
-            <div class="input-group mb-3">
-              <input type="password" class="form-control" placeholder="Password" />
-              <div class="input-group-text"><span class="bi bi-lock-fill"></span></div>
-            </div>
-            <!--begin::Row-->
-            <div class="row">
-              <div class="col-8">
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-                  <label class="form-check-label" for="flexCheckDefault">
-                    I agree to the <a href="#">terms</a>
-                  </label>
-                </div>
-              </div>
-              <!-- /.col -->
-              <div class="col-4">
-                <div class="d-grid gap-2">
-                  <button type="submit" class="btn btn-primary">Sign In</button>
-                </div>
-              </div>
-              <!-- /.col -->
-            </div>
-            <!--end::Row-->
-          </form>
-          <div class="social-auth-links text-center mb-3 d-grid gap-2">
-            <p>- OR -</p>
-            <a href="#" class="btn btn-primary">
-              <i class="bi bi-facebook me-2"></i> Sign in using Facebook
-            </a>
-            <a href="#" class="btn btn-danger">
-              <i class="bi bi-google me-2"></i> Sign in using Google+
-            </a>
-          </div>
-          <!-- /.social-auth-links -->
-          <p class="mb-0">
-            <a href="login.html" class="text-center"> I already have a membership </a>
-          </p>
-        </div>
-        <!-- /.register-card-body -->
-      </div>
+@extends('layouts.guest')
+@section('title', 'Đăng ký')
+@section('styles')
+<style>
+    /* Styles for the password input group */
+    .password-input-group {
+        position: relative;
+    }
+
+    .form-label {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+    }
+
+    .caps-lock {
+        color: #0d6efd;
+        font-size: 0.875em;
+        font-weight: 500;
+        display: none;
+        cursor: default;
+        user-select: none;
+    }
+
+    /* Toggle password icon */
+    .toggle-password {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(10%);
+        cursor: pointer;
+        color: #6c757d;
+        font-size: 1.1em;
+        z-index: 10;
+    }
+
+    /* Strength bar container */
+    .strength-bar-container {
+        display: flex;
+        gap: 4px;
+        margin-top: 8px;
+        height: 6px;
+        background-color: #e9ecef;
+        border-radius: 3px;
+        overflow: hidden;
+    }
+
+    .strength-bar-segment {
+        flex-grow: 1;
+        height: 100%;
+        background-color: transparent;
+        transition: background-color 0.3s ease;
+        border-radius: 2px;
+    }
+
+    /* Strength colors */
+    .strength-bar-segment.active-weak {
+        background-color: #dc3545;
+        /* Red - Weak */
+    }
+
+    .strength-bar-segment.active-medium {
+        background-color: #ffc107;
+        /* Yellow - Medium */
+    }
+
+    .strength-bar-segment.active-strong {
+        background-color: #198754;
+        /* Green - Strong */
+    }
+
+    .strength-bar-segment.active-very-strong {
+        background-color: #0d6efd;
+        /* Blue - Very strong */
+    }
+
+    .strength-text {
+        font-size: 0.875em;
+        color: #6c757d;
+        margin-top: 5px;
+    }
+
+    #generateNewPassword {
+        background-color: transparent;
+        border: none;
+        color: #0d6efd;
+        cursor: pointer;
+        font-size: 0.875em;
+        margin-bottom: 10px;
+    }
+</style>
+@endsection
+@section('content')
+<form style="width: 100%; max-width: 400px;" method="POST" action="{{ route('auth.register') }}">
+    @csrf
+    @method('POST')
+    <!-- Logo VNPT -->
+    <x-logo />
+    <!-- Title for registration -->
+    <h2 class="mb-4 text-center text-uppercase">Đăng ký</h2>
+    <x-alert-general name='error-register' />
+
+    <!-- Input fields for registration -->
+    <div class="mb-2">
+        <label for="name" class="form-label fw-bold">Tên người dùng</label>
+        <input type="text" class="form-control" id="name" name="name" value="{{old('name')}}" required autofocus />
+        <x-error-message name="name" />
     </div>
-    <!-- /.register-box -->
-    <!--begin::Third Party Plugin(OverlayScrollbars)-->
-    <script
-      src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js"
-      crossorigin="anonymous"
-    ></script>
-    <!--end::Third Party Plugin(OverlayScrollbars)--><!--begin::Required Plugin(popperjs for Bootstrap 5)-->
-    <script
-      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-      crossorigin="anonymous"
-    ></script>
-    <!--end::Required Plugin(popperjs for Bootstrap 5)--><!--begin::Required Plugin(Bootstrap 5)-->
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js"
-      crossorigin="anonymous"
-    ></script>
-    <!--end::Required Plugin(Bootstrap 5)--><!--begin::Required Plugin(AdminLTE)-->
-    <script src="../js/adminlte.js"></script>
-    <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
-    <script>
-      const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
-      const Default = {
-        scrollbarTheme: 'os-theme-light',
-        scrollbarAutoHide: 'leave',
-        scrollbarClickScroll: true,
-      };
-      document.addEventListener('DOMContentLoaded', function () {
-        const sidebarWrapper = document.querySelector(SELECTOR_SIDEBAR_WRAPPER);
-        if (sidebarWrapper && OverlayScrollbarsGlobal?.OverlayScrollbars !== undefined) {
-          OverlayScrollbarsGlobal.OverlayScrollbars(sidebarWrapper, {
-            scrollbars: {
-              theme: Default.scrollbarTheme,
-              autoHide: Default.scrollbarAutoHide,
-              clickScroll: Default.scrollbarClickScroll,
-            },
-          });
+
+    <div class="mb-2">
+        <label for="email" class="form-label fw-bold">Email</label>
+        <input type="email" class="form-control" id="email" name="email" value="{{old('email')}}" required autocomplete="username" />
+        <x-error-message name="email" />
+    </div>
+
+    <div class="mb-2">
+        <div class="password-input-group">
+            <label for="password" class="form-label fw-bold">
+                Mật khẩu
+                <span class="caps-lock" id="capsLockIndicator">ℹ️ Caps Lock is on</span>
+            </label>
+            <input type="password" class="form-control" id="password" name="password" autocomplete="new-password" required />
+            <span class="toggle-password" data-target="#password">
+                <i class="fa fa-eye"></i>
+            </span>
+        </div>
+        <x-error-message name="password" />
+
+        <div class="strength-bar-container" id="strengthBarContainer">
+            <div class="strength-bar-segment" data-segment="1"></div>
+            <div class="strength-bar-segment" data-segment="2"></div>
+            <div class="strength-bar-segment" data-segment="3"></div>
+            <div class="strength-bar-segment" data-segment="4"></div>
+            <div class="strength-bar-segment" data-segment="5"></div>
+        </div>
+        <div class=" d-flex justify-content-between align-items-center mt-1">
+            <p id="strengthText" class="strength-text">Độ mạnh mật khẩu</p>
+            <button type="button" id="generateNewPassword">Tạo mật khẩu ngẫu nhiên</button>
+        </div>
+    </div>
+
+    <div class="mb-2">
+        <div class="password-input-group">
+            <label for="password_confirmation" class="form-label fw-bold">Xác nhận mật khẩu</label>
+            <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" autocomplete="new-password" required />
+            <span class="toggle-password" data-target="#password_confirmation">
+                <i class="fa fa-eye"></i>
+            </span>
+        </div>
+    </div>
+
+    <div class="my-2">
+        <div class="g-recaptcha" data-sitekey="{{ env('RECAPTCHA_SITE_KEY') }}"></div>
+        <x-error-recaptcha />
+    </div>
+    <button class="btn btn-primary w-100" type="submit">Đăng ký</button>
+
+    <div class="text-center mt-2">
+        <small>Bạn đã có tài khoản? <a href="{{ route('auth.login.form') }}">Đăng nhập</a></small>
+    </div>
+</form>
+@endsection
+@section('scripts')
+<script>
+    $(document).ready(function() {
+        $('#generateNewPassword').click(function() {
+            $.ajax({
+                url: '{{ route("auth.register.generate-password") }}',
+                method: 'GET',
+                success: function(response) {
+                    $('#password').val(response.password).trigger('input');
+                },
+                error: function(xhr) {
+                    console.error('Lỗi khi tạo mật khẩu:', xhr.responseText);
+                }
+            });
+        });
+        // Chức năng ẩn/hiện mật khẩu ---
+        $(".toggle-password").on('click', function() {
+            $(this).find("i").toggleClass("fa-eye fa-eye-slash");
+            const targetId = $(this).data('target');
+            const $passwordField = $(targetId);
+
+            if ($passwordField.attr("type") === "password") {
+                $passwordField.attr("type", "text");
+            } else {
+                $passwordField.attr("type", "password");
+            }
+        });
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        const $passwordInput = $('#password');
+        const $capsLockIndicator = $('#capsLockIndicator');
+        const $strengthSegments = $('.strength-bar-segment');
+        const $strengthText = $('#strengthText');
+
+        // Kiểm tra Caps Lock
+        $passwordInput.on('keydown', function(e) {
+            const char = e.key;
+            const isShift = e.shiftKey;
+            const isCapsLockLikely = char.length === 1 && char.match(/[A-Z]/) && !isShift;
+            if (isCapsLockLikely) {
+                console.log('Caps Lock is on');
+                $capsLockIndicator.show();
+            } else {
+                console.log('Caps Lock is off');
+                $capsLockIndicator.hide();
+            }
+        });
+
+        // Khi người dùng click ra khỏi input, ẩn cảnh báo Caps Lock
+        $passwordInput.on('blur', function() {
+            $capsLockIndicator.hide();
+        });
+
+        // Hàm đo độ mạnh mật khẩu
+        function checkPasswordStrength(password) {
+            let score = 0;
+            if (password.length >= 8) score++;
+            if (/[A-Z]/.test(password)) score++;
+            if (/[a-z]/.test(password)) score++;
+            if (/[0-9]/.test(password)) score++;
+            if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) score++;
+            return score;
         }
-      });
-    </script>
-    <!--end::OverlayScrollbars Configure-->
-    <!--end::Script-->
-  </body>
-  <!--end::Body-->
-</html>
+
+        // Cập nhật thanh đo và văn bản độ mạnh ---
+        $passwordInput.on('input', function() {
+            const password = $(this).val();
+            const strengthScore = checkPasswordStrength(password);
+
+            let text = 'Độ mạnh mật khẩu';
+            let className = '';
+
+            $strengthSegments.removeClass('active-weak active-medium active-strong active-very-strong');
+
+            if (password.length === 0) {
+                text = 'Độ mạnh mật khẩu';
+            } else if (strengthScore <= 1) {
+                text = 'Yếu';
+                className = 'active-weak';
+            } else if (strengthScore === 2) {
+                text = 'Trung bình';
+                className = 'active-medium';
+            } else if (strengthScore === 3) {
+                text = 'Khá';
+                className = 'active-medium';
+            } else if (strengthScore === 4) {
+                text = 'Mạnh';
+                className = 'active-strong';
+            } else if (strengthScore === 5) {
+                text = 'Rất mạnh';
+                className = 'active-very-strong';
+            }
+
+            for (let i = 0; i < strengthScore; i++) {
+                $($strengthSegments[i]).addClass(className);
+            }
+
+            $strengthText.text(text);
+        });
+
+        // Kích hoạt hàm kiểm tra khi tải trang
+        $passwordInput.trigger('input');
+    });
+</script>
+@endsection
