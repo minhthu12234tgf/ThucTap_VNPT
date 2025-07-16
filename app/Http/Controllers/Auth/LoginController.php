@@ -73,7 +73,7 @@ class LoginController extends Controller
                     'ip' => $request->ip(),
                     'user_agent' => $request->header('User-Agent')
                 ]);
-                return redirect()->intended('/');
+                return redirect()->intended(route('dashboard.index'));
             }
 
             //Handle failed authentication
@@ -114,12 +114,20 @@ class LoginController extends Controller
      */
     public function logout(Request $request)
     {
+        $user = Auth::user();
         Auth::logout();
-
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
-
-        return redirect('/showFormlogin');
+        // Ghi log đăng xuất nếu có người dùng đăng nhập
+        if ($user) {
+            Log::channel('login')->info('Đăng xuất thành công', [
+                'user_id' => $user->id,
+                'email' => $user->email,
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+                'time' => now()->format('Y-m-d H:i:s')
+            ]);
+        }
+        return redirect()->route('auth.login.form');
     }
 }
