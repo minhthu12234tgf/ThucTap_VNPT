@@ -194,7 +194,6 @@
     <!-- Data JS -->
     <script>
         const allData = @json($allData);
-        // console.log(allData); // Kiểm tra dữ liệu đã lấy được chưa
     </script>
 
     {{-- CUSTOM SCRIPT --}}
