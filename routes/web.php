@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\IncidentController;
 Route::prefix('vnpt-support')->group(function () {
     // Authentication routes
     Route::prefix('auth')->name('auth.')->group(function () {
@@ -20,3 +21,5 @@ Route::prefix('vnpt-support')->group(function () {
 });
 Route::get('/', [DashboardController::class, 'index']);
 Route::post('/', [DashboardController::class, 'send']);
+Route::get('/incident-report', [IncidentController::class, 'index']);
+Route::post('/incident-report', [IncidentController::class, 'store'])->name('incident.store');
