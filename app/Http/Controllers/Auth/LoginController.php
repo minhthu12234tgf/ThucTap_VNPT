@@ -20,6 +20,7 @@ class LoginController extends Controller
      *
      * @return \Illuminate\View\View
      */
+    private $maxAttempts = 5; // Maximum login attempts
 
     public function showLoginForm()
     {
@@ -124,7 +125,7 @@ class LoginController extends Controller
             $throttleKey = 'login:' . strtolower($request->input('email')) . '|' . $request->ip();
 
             // Check if the user is rate limited
-            if (RateLimiter::tooManyAttempts($throttleKey, 2)) {
+            if (RateLimiter::tooManyAttempts($throttleKey, $this->maxAttempts)) {
                 $seconds = RateLimiter::availableIn($throttleKey);
                 Log::channel('login')->warning('Login attempt rate limited.', [
                     'email' => $request->input('email'),
