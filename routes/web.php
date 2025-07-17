@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\IncidentController;
 
 // Authentication routes
 Route::prefix('auth')->name('auth.')->middleware('guest')->group(function () {
@@ -20,4 +21,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
     Route::post('/dashboard', [DashboardController::class, 'send'])->name('dashboard.send');
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+    Route::get('/incident-report', [IncidentController::class, 'index'])->name('incident.index');
+    Route::post('/incident-report', [IncidentController::class, 'store'])->name('incident.store');
 });
