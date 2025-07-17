@@ -6,6 +6,12 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\IncidentController;
+
+// Add default login route for auth middleware
+Route::get('/login', function () {
+    return redirect()->route('auth.login.form');
+})->name('login');
+
 Route::prefix('vnpt-support')->group(function () {
     // Authentication routes
     Route::prefix('auth')->name('auth.')->group(function () {
@@ -18,8 +24,13 @@ Route::prefix('vnpt-support')->group(function () {
         Route::post('/forgot-password', [ForgotPasswordController::class, 'forgotPassword'])->name('password.email');
         Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
     });
+
+    // Protected routes (require authentication)
+    Route::middleware('auth')->group(function () {
+        Route::get('/incident-report', [IncidentController::class, 'index'])->name('incident.report');
+        Route::post('/incident-report', [IncidentController::class, 'store'])->name('incident.report.store');
+    });
 });
+
 Route::get('/', [DashboardController::class, 'index']);
 Route::post('/', [DashboardController::class, 'send']);
-Route::get('/incident-report', [IncidentController::class, 'index']);
-Route::post('/incident-report', [IncidentController::class, 'store'])->name('incident.store');

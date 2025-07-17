@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="./css/sidebar.css">
+<link rel="stylesheet" href="{{ asset('css/sidebar.css') }}">
 
 <!--begin::Sidebar-->
 <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
@@ -7,12 +7,14 @@
         <!--begin::Brand Link-->
         <a href="/" class="brand-link d-flex align-items-center">
             <!--begin::Brand Image-->
-            <img src="./assets/img/vnpt.jpg" alt="VNPT Logo" class="brand-image opacity-80 shadow rounded-circle me-0" />
+            <img src="{{ asset('assets/img/vnpt.jpg') }}" alt="VNPT Logo"
+                class="brand-image opacity-80 shadow rounded-circle me-0" />
             <!--end::Brand Image-->
 
             <!--begin::Brand Text-->
             <span class="brand-text">
-                <span class="fw-light font-custom text-info">VNPT</span><span class="fw-bold text-warning">Support</span>
+                <span class="fw-light font-custom text-info">VNPT</span><span
+                    class="fw-bold text-warning">Support</span>
             </span>
             <!--end::Brand Text-->
         </a>
@@ -31,14 +33,15 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="#" class="nav-link active">
+                    <a href="/" class="nav-link active">
                         <i class="nav-icon bi bi-house text-primary"></i>
                         <p>Trang chủ</p>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{ route('incident.report') }}"
+                        class="nav-link {{ request()->routeIs('incident.report') ? 'active' : '' }}">
                         <i class="nav-icon bi bi-card-checklist text-info"></i>
                         <p>Yêu cầu hỗ trợ</p>
                     </a>
@@ -114,7 +117,7 @@
 <!--end::Required Plugin(popperjs for Bootstrap 5)--><!--begin::Required Plugin(Bootstrap 5)-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
 <!--end::Required Plugin(Bootstrap 5)--><!--begin::Required Plugin(AdminLTE)-->
-<script src="./js/adminlte.js"></script>
+<script src="{{ asset('js/adminlte.js') }}"></script>
 <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
 <script>
     const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
@@ -123,7 +126,7 @@
         scrollbarAutoHide: 'leave',
         scrollbarClickScroll: true,
     };
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const sidebarWrapper = document.querySelector(SELECTOR_SIDEBAR_WRAPPER);
         if (sidebarWrapper && OverlayScrollbarsGlobal?.OverlayScrollbars !== undefined) {
             OverlayScrollbarsGlobal.OverlayScrollbars(sidebarWrapper, {

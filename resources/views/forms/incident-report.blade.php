@@ -1,57 +1,119 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-  <meta charset="UTF-8">
-  <title>Form Báo Cáo Sự Cố Internet VNPT</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-light">
+@php
+    use App\Models\YeuCau;
+@endphp
 
-<div class="container mt-5">
-  <div class="card shadow-lg rounded-4">
-    <div class="card-header bg-primary text-white text-center">
-      <h4 class="mb-0">BÁO CÁO SỰ CỐ INTERNET VNPT</h4>
+@extends('layouts.admin')
+
+@section('title', 'Báo cáo sự cố')
+
+@section('content')
+    <!-- Debug auth status -->
+    @if(Auth::check())
+        <div class="alert alert-info">
+            Đã đăng nhập: {{ Auth::user()->name }}
+            <br>User ID: {{ Auth::id() }}
+        </div>
+    @else
+        <div class="alert alert-warning">
+            Chưa đăng nhập
+        </div>
+    @endif
+
+    <div class="container-fluid mt-4">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10">
+                <div class="card shadow-lg rounded-4">
+                    <div class="card-header bg-primary text-white text-center">
+                        <h4 class="mb-0">BÁO CÁO SỰ CỐ INTERNET VNPT</h4>
+                    </div>
+                    <div class="card-body">
+                        @if(session('success'))
+                            <div class="alert alert-success text-center">
+                                {{ session('success') }}
+                            </div>
+                        @endif
+
+                        @if($errors->any())
+                            <div class="alert alert-danger">
+                                <ul class="mb-0">
+                                    @foreach($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
+                        <form method="POST" action="{{ route('incident.report.store') }}" enctype="multipart/form-data">
+                            @csrf
+
+                            <!-- Thông tin khách hàng -->
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <label class="form-label">Họ tên</label>
+                                    <input type="text" class="form-control" value="{{ $khachHang->ho_ten }}" readonly>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Số điện thoại</label>
+                                    <input type="text" class="form-control" value="{{ $khachHang->sdt }}" readonly>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Địa chỉ</label>
+                                    <input type="text" class="form-control" value="{{ $khachHang->vi_tri }}" readonly>
+                                </div>
+                            </div>
+
+                            <!-- Loại sự cố -->
+                            <div class="mb-3">
+                                <label class="form-label">Loại sự cố</label>
+                                <select class="form-select" name="loai_succo" required>
+                                    <option value="">-- Chọn loại sự cố --</option>
+                                    @foreach($loaiSuCo as $label => $value)
+                                        <option value="{{ $value }}">{{ $label }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Thiết bị gặp sự cố</label>
+                                <input type="text" class="form-control" name="ten_thiet_bi"
+                                    placeholder="VD: Modem VNPT, Router TP-Link..." required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Mô tả chi tiết sự cố</label>
+                                <textarea class="form-control" name="mo_ta" rows="4"
+                                    placeholder="Mô tả rõ tình trạng, thời điểm xảy ra sự cố..." required></textarea>
+                            </div>
+
+                            <!-- Thời gian hẹn -->
+                            <div class="mb-3">
+                                <label class="form-label">Thời gian hẹn</label>
+                                <select class="form-select" name="thoigian_hen" required>
+                                    @foreach($thoiGianHen as $label => $value)
+                                        <option value="{{ $value }}">{{ $label }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Hình ảnh/Video sự cố (nếu có)</label>
+                                <input type="file" class="form-control" name="file_dinh_kem[]" accept="image/*,video/*"
+                                    multiple>
+                                <small class="text-muted">Có thể tải lên nhiều file (tối đa 5MB/file)</small>
+                            </div>
+
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary px-4 rounded-pill">
+                                    <i class="bi bi-send"></i> Gửi báo cáo
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card-footer text-center text-muted small">
+                        VNPT hỗ trợ kỹ thuật 24/7 - Tổng đài: 1800 1166
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="card-body">
-      <form method="POST" action="{{ route('incident.store') }}">
-        @csrf
-        <div class="mb-3">
-          <label for="name" class="form-label">Họ tên</label>
-          <input type="text" class="form-control" id="name" placeholder="" required>
-        </div>
-
-        <div class="mb-3">
-          <label for="phone" class="form-label">Số điện thoại</label>
-          <input type="tel" class="form-control" id="phone" placeholder="" required>
-        </div>
-
-        <div class="mb-3">
-          <label for="address" class="form-label">Địa chỉ</label>
-          <input type="text" class="form-control" id="address" placeholder="" required>
-        </div>
-
-        <div class="mb-3">
-          <label for="device_name" class="form-label">Tên thiết bị</label>
-          <input type="text" class="form-control" id="device_name" name="device_name" placeholder="Modem VNPT, Router TP-Link..." required>
-        </div>
-
-        <div class="mb-3">
-          <label for="description" class="form-label">Mô tả sự cố</label>
-          <textarea class="form-control" id="description" name="description" rows="4" placeholder="Mô tả chi tiết sự cố..." required></textarea>
-        </div>
-
-        <div class="text-center">
-          <button type="submit" class="btn btn-primary px-4 rounded-pill">Gửi báo cáo</button>
-        </div>
-      </form>
-    </div>
-    <div class="card-footer text-center text-muted small">
-      VNPT hỗ trợ kỹ thuật 24/7 - Tổng đài: 1800 1166
-    </div>
-  </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+@endsection
