@@ -7,6 +7,10 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\IncidentController;
 
+Route::get('/', function () {
+    return redirect()->route('auth.login.form');
+});
+
 // Authentication routes
 Route::prefix('auth')->name('auth.')->middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login.form');

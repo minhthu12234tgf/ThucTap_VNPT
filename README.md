@@ -1,15 +1,15 @@
-###### Khi clone repo về cần #####
+## Khi clone repo về cần 
 composer install
 
-##### Tạo .env và copy từ .env.example ########
-## Trên Window PowerShell
+## Tạo .env và copy từ .env.example 
+### Trên Window PowerShell
 Copy-Item -Path .env.example -Destination .env
-## Trên Linux/MacOS
+### Trên Linux/MacOS
 cp .env.example .env
-## Trên Windows Command Prompt (CMD):
+### Trên Windows Command Prompt (CMD):
 copy .env.example .env
-## Lệnh tạo APP_KEY mới
+### Lệnh tạo APP_KEY mới
 php artisan key:generate
 
-###### Chạy server #####
+## Chạy server 
 php artisan serve
