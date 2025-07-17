@@ -91,3 +91,11 @@
     transform: translateY(-4px);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
+
+/* CSS cho các ô nhỏ trên dashboard */
+.small-box .inner {
+    height: 90px; /* Giữ chiều cao cố định */
+    overflow: hidden; /* Ẩn nội dung tràn ra ngoài */
+    text-overflow: ellipsis; /* (tùy chọn) nếu muốn thêm dấu ... */
+    white-space: nowrap; /* (tùy chọn) nếu muốn ngăn xuống dòng */
+}
