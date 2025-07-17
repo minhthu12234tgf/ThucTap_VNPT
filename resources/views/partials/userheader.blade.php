@@ -137,46 +137,44 @@
             </li>
             <!--end::Fullscreen Toggle-->
             <!--begin::User Menu Dropdown-->
-<li class="nav-item dropdown user-menu">
-    @auth
-        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-            <img src="{{ asset('assets/img/user2-160x160.jpg') }}"
-                class="user-image rounded-circle shadow" alt="User Image" />
-            <span class="d-none d-md-inline">{{ Auth::user()->name }}</span>
-        </a>
-        <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
-            <!--begin::User Image-->
-            <li class="user-header text-bg-primary">
-                <img src="{{ asset('assets/img/user2-160x160.jpg') }}" class="rounded-circle shadow" alt="User Image" />
-                <p>
-                    {{ Auth::user()->name }} - {{ Auth::user()->role ?? 'Thành viên' }}
-                    <small>Member since {{ Auth::user()->created_at->format('M. Y') }}</small>
-                </p>
-            </li>
-            <!--end::User Image-->
-            <!--begin::Menu Footer-->
-            <li class="user-footer">
-                <a href="{{ url('/profile') }}" class="btn btn-default btn-flat">Trang cá nhân</a>
-                <a href="{{ route('logout') }}" class="btn btn-default btn-flat float-end"
-                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                    Đăng xuất
-                </a>
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                    @csrf
-                </form>
-            </li>
-            <!--end::Menu Footer-->
-        </ul>
-    @endauth
+            <li class="nav-item dropdown user-menu">
+                @auth
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                        <img src="{{ asset('assets/img/user2-160x160.jpg') }}"
+                            class="user-image rounded-circle shadow" alt="User Image" />
+                        <span class="d-none d-md-inline">{{ Auth::user()->name }}</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
+                        <li class="user-header text-bg-primary">
+                            <img src="{{ asset('assets/img/user2-160x160.jpg') }}"
+                                class="rounded-circle shadow" alt="User Image" />
+                            <p>
+                                {{ Auth::user()->name }} - {{ Auth::user()->role ?? 'Unknown' }}
+                                <small>Member since {{ Auth::user()->created_at->format('M. Y') }}</small>
+                            </p>
+                        </li>
+                        <li class="user-footer">
+                            <a href="{{ url('/profile') }}" class="btn btn-default btn-flat">Trang cá nhân</a>
+                            <a href="{{ route('auth.logout') }}" class="btn btn-default btn-flat float-end"
+                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                Đăng xuất
+                            </a>
+                            <form id="logout-form" action="{{ route('auth.logout') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
+                        </li>
+                    </ul>
+                @endauth
 
-    @guest
-        <a href="{{ route('login') }}" class="nav-link">
-            <img src="{{ asset('assets/img/user2-160x160.jpg') }}"
-                class="user-image rounded-circle shadow" alt="Default Avatar" />
-            <span class="d-none d-md-inline">Chưa đăng nhập</span>
-        </a>
-    @endguest
-</li>
+                @guest
+                    <a href="{{ route('auth.login.form') }}" class="nav-link">
+                        <img src="{{ asset('assets/img/user2-160x160.jpg') }}"
+                            class="user-image rounded-circle shadow" alt="Default Avatar" />
+                        <span class="d-none d-md-inline">Chưa đăng nhập</span>
+                    </a>
+                @endguest
+            </li>
+
 <!--end::User Menu Dropdown-->
 
         </ul>
