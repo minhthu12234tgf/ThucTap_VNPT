@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="./css/sidebar.css">
+<link rel="stylesheet" href="{{ asset('css/sidebar.css') }}" />
 
 <!--begin::Sidebar-->
 <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
@@ -7,7 +7,7 @@
         <!--begin::Brand Link-->
         <a href="/" class="brand-link d-flex align-items-center">
             <!--begin::Brand Image-->
-            <img src="./assets/img/vnpt.jpg" alt="VNPT Logo" class="brand-image opacity-80 shadow rounded-circle me-0" />
+            <img src="{{ asset('assets/img/vnpt.jpg') }}" alt="VNPT Logo" class="brand-image opacity-80 shadow rounded-circle me-0" />
             <!--end::Brand Image-->
 
             <!--begin::Brand Text-->
@@ -114,7 +114,7 @@
 <!--end::Required Plugin(popperjs for Bootstrap 5)--><!--begin::Required Plugin(Bootstrap 5)-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
 <!--end::Required Plugin(Bootstrap 5)--><!--begin::Required Plugin(AdminLTE)-->
-<script src="./js/adminlte.js"></script>
+<script src="{{ asset('js/adminlte.js') }}"></script>
 <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
 <script>
     const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';

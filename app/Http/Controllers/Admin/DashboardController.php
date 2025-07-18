@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -30,7 +30,7 @@ class DashboardController extends Controller
                     'trang_thai' => $nv->trang_thai,
                     'vi_do' => $nv->vi_do,
                     'kinh_do' => $nv->kinh_do,
-                    'anh_dai_dien' => './assets/img/vnpt.jpg',
+                    'anh_dai_dien' => asset('').'assets/img/vnpt.jpg',
                     'loai' => 'employee'
                 ]);
         } catch (\Exception $e) {
@@ -54,7 +54,7 @@ class DashboardController extends Controller
                     'trang_thai' => $yc->trang_thai,
                     'vi_do' => $yc->vi_do,
                     'kinh_do' => $yc->kinh_do,
-                    'anh_dai_dien' => './assets/img/user.png',
+                    'anh_dai_dien' => asset('').'assets/img/user.png',
                     'loai' => 'customer'
                 ]);
         } catch (\Exception $e) {
