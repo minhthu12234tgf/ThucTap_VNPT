@@ -20,6 +20,8 @@ Route::prefix('auth')->name('auth.')->middleware('guest')->group(function () {
     Route::get('/register/generate-password', [RegisterController::class, 'generateRandomPassword'])->name('register.generate-password');
     Route::get('/forgot-password', [ForgotPasswordController::class, 'showForgotPasswordForm'])->name('forgot-password.form');
     Route::post('/forgot-password', [ForgotPasswordController::class, 'forgotPassword'])->name('password.email');
+    Route::get('/reset-password', [ForgotPasswordController::class, 'showResetPasswordForm'])->name('reset-password.form');
+    Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'])->name('reset-password');
 });
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
