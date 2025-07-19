@@ -60,17 +60,12 @@ class YeuCau extends Model
         'id_nhan_vien_duoc_phan_cong',
         'create_at',
         'update_at',
-        'kinh_do',
-        'vi_do',
-        'muc_do_uu_tien',
         'file_dinh_kem'
     ];
 
     protected $casts = [
         'create_at' => 'datetime',
         'update_at' => 'datetime',
-        'kinh_do' => 'double',
-        'vi_do' => 'double',
         'file_dinh_kem' => 'json'
     ];
 

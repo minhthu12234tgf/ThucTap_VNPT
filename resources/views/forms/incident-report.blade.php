@@ -60,6 +60,21 @@
                                     <label class="form-label">Địa chỉ</label>
                                     <input type="text" class="form-control" value="{{ $khachHang->vi_tri }}" readonly>
                                 </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Hợp đồng</label>
+                                    <select name="hop_dong_id" class="form-select" required>
+                                        <option value="">-- Chọn hợp đồng --</option>
+                                        @foreach($hopDongs as $hopDong)
+                                          <option value="{{ $hopDong->id_hd }}" {{ old('hop_dong_id') == $hopDong->id_hd ? 'selected' : '' }}>
+                                            {{ $hopDong->ten_hd }}
+                                          </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Địa chỉ hợp đồng</label>
+                                    <input type="text" class="form-control" name="dia_chi_hop_dong" value="{{ old('dia_chi_hop_dong') }}">
+                                </div>
                             </div>
 
                             <!-- Loại sự cố -->
@@ -84,7 +99,6 @@
                                 <textarea class="form-control" name="mo_ta" rows="4"
                                     placeholder="Mô tả rõ tình trạng, thời điểm xảy ra sự cố..." required></textarea>
                             </div>
-
                             <!-- Thời gian hẹn -->
                             <div class="mb-3">
                                 <label class="form-label">Thời gian hẹn</label>
@@ -116,4 +130,23 @@
             </div>
         </div>
     </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const hopDongSelect = document.querySelector('select[name="hop_dong_id"]');
+  const diaChiInput = document.querySelector('input[name="dia_chi_hop_dong"]');
+  // Lưu thông tin địa chỉ hợp đồng vào object
+  const diaChiHopDong = {
+    @foreach($hopDongs as $hopDong)
+      "{{ $hopDong->id_hd }}": "{{ addslashes($hopDong->vi_tri_ld ?? '') }}",
+    @endforeach
+  };
+
+  hopDongSelect.addEventListener('change', function () {
+    const id = this.value;
+    diaChiInput.value = diaChiHopDong[id] || '';
+  });
+});
+</script>
+
 @endsection

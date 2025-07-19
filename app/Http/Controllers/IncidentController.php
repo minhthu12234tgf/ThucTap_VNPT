@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\YeuCau;
 use App\Models\KhachHang;
+use App\Models\HopDong;
 use App\Models\NhanVien;
 use App\Models\LichSuPhanCong;
 use Illuminate\Http\Request;
@@ -26,7 +27,7 @@ class IncidentController extends Controller
 
             // Lấy thông tin khách hàng
             $khachHang = KhachHang::where('id_taikhoan', $taiKhoan->id_taikhoan)->first();
-
+            $hopDongs = HopDong::where('id_khachhang', $khachHang->id_khachhang)->get();
             if (!$khachHang) {
                 return redirect()->route('auth.login.form')
                     ->with('error', 'Tài khoản của bạn chưa được liên kết với thông tin khách hàng. Vui lòng liên hệ quản trị viên.');
@@ -47,7 +48,7 @@ class IncidentController extends Controller
                 'Tối (18h-21h)' => 'evening'
             ];
 
-            return view('forms.incident-report', compact('khachHang', 'loaiSuCo', 'thoiGianHen'));
+            return view('forms.incident-report', compact('khachHang', 'loaiSuCo', 'thoiGianHen', 'hopDongs'));
         } catch (\Exception $e) {
             Log::error('Error in IncidentController@index: ' . $e->getMessage());
             return redirect()->route('auth.login.form')
@@ -73,31 +74,37 @@ class IncidentController extends Controller
                     ->with('error', 'Không tìm thấy thông tin khách hàng.');
             }
 
+
             $validated = $request->validate([
                 'ten_thiet_bi' => 'required|string|max:255',
                 'loai_succo' => 'required|in:internet,speed,disconnect,modem,other',
                 'mo_ta' => 'required|string',
                 'thoigian_hen' => 'required|in:anytime,morning,afternoon,evening',
+                'hop_dong_id' => 'required|exists:hop_dong,id_hd',
                 'file_dinh_kem.*' => 'nullable|file|max:5120|mimes:jpg,jpeg,png,mp4'
             ]);
 
             $attachments = [];
             if ($request->hasFile('file_dinh_kem')) {
                 foreach ($request->file('file_dinh_kem') as $file) {
-                    $attachments[] = $file->store('incident-attachments', 'public');
+                    $fileContent = base64_encode(file_get_contents($file->getRealPath()));
+                    $attachments[] = [
+                        'name' => $file->getClientOriginalName(),
+                        'type' => $file->getClientMimeType(),
+                        'data' => $fileContent
+                    ];
                 }
             }
 
             $yeuCau = YeuCau::create([
                 'id_khach_hang' => $khachHang->id_khachhang,
+                'ma_hopdong' => $validated['hop_dong_id'],
                 'ten_thiet_bi' => $validated['ten_thiet_bi'],
                 'loai_succo' => $validated['loai_succo'],
                 'mo_ta' => $validated['mo_ta'],
                 'thoigian_hen' => $validated['thoigian_hen'],
                 'trang_thai' => 'Chờ xử lý',
-                'file_dinh_kem' => $attachments,
-                'kinh_do' => $khachHang->kinh_do ?? 1,
-                'vi_do' => $khachHang->vi_do ?? 1,
+                'file_dinh_kem' => $attachments ? json_encode($attachments) : null,
             ]);
 
             $this->timNhanVienGanNhat($yeuCau);
