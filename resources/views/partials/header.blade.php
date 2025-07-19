@@ -33,7 +33,7 @@
                         <!--begin::Message-->
                         <div class="d-flex">
                             <div class="flex-shrink-0">
-                                <img src="./assets/img/user1-128x128.jpg" alt="User Avatar"
+                                <img src="{{ asset('assets/img/user1-128x128.jpg') }}" alt="User Avatar"
                                     class="img-size-50 rounded-circle me-3" />
                             </div>
                             <div class="flex-grow-1">
@@ -54,7 +54,7 @@
                         <!--begin::Message-->
                         <div class="d-flex">
                             <div class="flex-shrink-0">
-                                <img src="./assets/img/user8-128x128.jpg" alt="User Avatar"
+                                <img src="{{ asset('assets/img/user8-128x128.jpg') }}" alt="User Avatar"
                                     class="img-size-50 rounded-circle me-3" />
                             </div>
                             <div class="flex-grow-1">
@@ -77,7 +77,7 @@
                         <!--begin::Message-->
                         <div class="d-flex">
                             <div class="flex-shrink-0">
-                                <img src="./assets/img/user3-128x128.jpg" alt="User Avatar"
+                                <img src="{{ asset('assets/img/user3-128x128.jpg') }}" alt="User Avatar"
                                     class="img-size-50 rounded-circle me-3" />
                             </div>
                             <div class="flex-grow-1">
@@ -139,14 +139,14 @@
             <!--begin::User Menu Dropdown-->
             <li class="nav-item dropdown user-menu">
                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                    <img src="./assets/img/user2-160x160.jpg" class="user-image rounded-circle shadow"
+                    <img src="{{ asset('assets/img/user2-160x160.jpg') }}" class="user-image rounded-circle shadow"
                         alt="User Image" />
                     <span class="d-none d-md-inline">{{ empty(Auth::user()?->ten_nguoi_dung) ? 'Guest' : Auth::user()->ten_nguoi_dung }}</span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
                     <!--begin::User Image-->
                     <li class="user-header text-bg-primary">
-                        <img src="./assets/img/user2-160x160.jpg" class="rounded-circle shadow" alt="User Image" />
+                        <img src="{{ asset('assets/img/user2-160x160.jpg') }}" class="rounded-circle shadow" alt="User Image" />
                         <p>
                             Alexander Pierce - Web Developer
                             <small>Member since Nov. 2023</small>
@@ -154,7 +154,7 @@
                     </li>
                     <!--end::User Image-->
                     <!--begin::Menu Body-->
-                    <li class="user-body">
+                    {{-- <li class="user-body">
                         <!--begin::Row-->
                         <div class="row">
                             <div class="col-4 text-center"><a href="#">Followers</a></div>
@@ -162,7 +162,7 @@
                             <div class="col-4 text-center"><a href="#">Friends</a></div>
                         </div>
                         <!--end::Row-->
-                    </li>
+                    </li> --}}
                     <!--end::Menu Body-->
                     <!--begin::Menu Footer-->
                     <li class="user-footer">
