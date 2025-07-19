@@ -24,6 +24,45 @@
         box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
         transform: scale(1.05);
     }
+
+    #scrollToTopBtn {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        width: 52px;
+        height: 52px;
+        border: none;
+        border-radius: 50%;
+        background-color: #005ab4;
+        /* Xanh đậm */
+        color: #ffffff;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 1050;
+        cursor: pointer;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    #scrollToTopBtn:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
+    }
+
+    #scrollToTopBtn::after {
+        content: "";
+        position: absolute;
+        bottom: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60%;
+        height: 8px;
+        background: rgba(0, 0, 0, 0.2);
+        filter: blur(4px);
+        border-radius: 50%;
+        z-index: -1;
+    }
 </style>
 
 <!-- SUB FOOTER -->
@@ -143,12 +182,27 @@
             </div>
         </div>
     </div>
-    <button class="scroll-top position-fixed"
-        style="bottom:24px;right:24px;background:#0096db;color:#fff;border:none;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 8px rgba(0,0,0,0.2);z-index:9999;"
-        onclick="window.scrollTo({top:0,behavior:'smooth'});">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
-            <path
-                d="M8 12a.5.5 0 0 1-.5-.5V4.707L4.354 8.854a.5.5 0 1 1-.708-.708l4-4a.5.5 0 0 1 .708 0l4 4a.5.5 0 0 1-.708.708L8.5 4.707V11.5A.5.5 0 0 1 8 12z" />
-        </svg>
+    <!-- Nút Scroll to Top -->
+    <button id="scrollToTopBtn" class="btn shadow">
+        <i class="bi bi-chevron-up fs-5"></i>
     </button>
+
+    <!-- JavaScript tự động ẩn/hiện -->
+    <script>
+        window.addEventListener("scroll", () => {
+            const btn = document.getElementById("scrollToTopBtn");
+            if (window.scrollY > 200) {
+                btn.style.display = "flex";
+            } else {
+                btn.style.display = "none";
+            }
+        });
+
+        document.getElementById("scrollToTopBtn").onclick = () => {
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        };
+    </script>
 </div>

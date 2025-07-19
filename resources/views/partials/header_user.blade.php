@@ -200,6 +200,23 @@
         <!-- Menu điều hướng -->
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
             <ul class="navbar-nav align-items-center gap-lg-3">
+                <!-- Thông báo -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" id="notiDropdown">
+                        <div class="position-relative d-inline-block">
+                            <i class="bi bi-bell fs-5"></i>
+                            <span
+                                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                                id="notification-badge">40</span>
+                        </div>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end shadow-sm"
+                        style="width: 300px; max-height: 400px; overflow-y: auto;" id="notification-list">
+                        <li class="px-3 py-2 text-muted">Không có thông báo mới.</li>
+                    </ul>
+                </li>
+
+                <!-- Tính năng -->
                 <li class="nav-item dropdown position-relative">
                     <a class="nav-link fw-medium d-flex align-items-center gap-1" href="#" id="featureDropdown"
                         data-bs-toggle="dropdown" aria-expanded="false">
@@ -225,31 +242,62 @@
                         </li>
                     </ul>
                 </li>
+
+                <!-- Dịch vụ -->
                 <li class="nav-item">
                     <a class="nav-link fw-medium" href="#services">Dịch vụ</a>
                 </li>
+
+                <!-- Liên hệ -->
                 <li class="nav-item">
                     <a class="nav-link fw-medium" href="#footer">Liên hệ</a>
                 </li>
 
-                <!-- Thông báo -->
-                <li class="nav-item dropdown">
-                    <a class="nav-link position-relative" href="#" role="button" data-bs-toggle="dropdown"
-                        id="notiDropdown">
-                        <i class="bi bi-bell fs-5"></i>
-                        <span
-                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger d-none"
-                            id="notification-badge">0</span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end shadow-sm"
-                        style="width: 300px; max-height: 400px; overflow-y: auto;" id="notification-list">
-                        <li class="px-3 py-2 text-muted">Không có thông báo mới.</li>
-                    </ul>
-                </li>
-
+                <!-- Đăng nhập -->
                 <li class="nav-item">
                     <a href="/login" class="btn btn-primary rounded-pill px-4">Đăng nhập</a>
                 </li>
+
+                <!-- Tài khoản -->
+                {{-- <li class="nav-item dropdown">
+                    <!-- Nút tài khoản -->
+                    <a class="btn btn-primary rounded-pill px-4 dropdown-toggle d-flex align-items-center gap-2"
+                        href="#" id="accountDropdown" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class="bi bi-person-circle"></i> Tài khoản
+                    </a>
+
+                    <!-- Dropdown tài khoản -->
+                    <ul class="dropdown-menu dropdown-menu-end p-3 border-0 shadow-lg rounded-4"
+                        aria-labelledby="accountDropdown" style="width: 280px;">
+
+                        <!-- Avatar + Tên người dùng -->
+                        <li class="d-flex align-items-center mb-3">
+                            <img src="https://i.pravatar.cc/60" alt="avatar" class="rounded-circle me-3 shadow-sm"
+                                width="50" height="50">
+                            <div>
+                                <strong class="d-block text-dark">Nguyễn Văn A</strong>
+                                <small class="text-muted">nguyenvana@example.com</small>
+                            </div>
+                        </li>
+
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <!-- Nút chức năng -->
+                        <li>
+                            <a href="/profile" class="dropdown-item d-flex align-items-center gap-2 py-2">
+                                <i class="bi bi-person-lines-fill text-primary"></i> Trang cá nhân
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/logout" class="dropdown-item d-flex align-items-center gap-2 py-2 text-danger">
+                                <i class="bi bi-box-arrow-right"></i> Đăng xuất
+                            </a>
+                        </li>
+                    </ul>
+                </li> --}}
             </ul>
         </div>
     </div>
